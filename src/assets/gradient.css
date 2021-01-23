@@ -39,3 +39,7 @@
     opacity: 0;
   }
 }
+
+input {
+  text-indent: 10px;
+}

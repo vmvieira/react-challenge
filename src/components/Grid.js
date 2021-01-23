@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import Approval from "./Approval";
 import Scheduled from "./Scheduled";
@@ -8,7 +9,13 @@ import Graph from "./Graph";
 
 const Grid = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState({
+    UserLoading: true,
+    HistoryLoading: true,
+    ScheduleLoading: true,
+    GraphLoading: true,
+  });
 
   useEffect(() => {
     async function getUsers() {
@@ -17,16 +24,29 @@ const Grid = () => {
           "https://sagris.com.br/teste-front/api/access-approval"
         );
         setUsers([...response.data.data.access_approval]);
-        setLoading(false);
+        setLoading(!loading.UserLoading);
       } catch (error) {
         console.error(error);
       }
     }
     getUsers();
+    async function getHistory() {
+      try {
+        const response = await axios.get(
+          "https://sagris.com.br/teste-front/api/last-access"
+        );
+        setHistory([...response.data.data.last_access]);
+        setLoading(!loading.HistoryLoading);
+        console.log(history);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getHistory();
   }, []);
 
   return (
-    <div className="py-8 pl-72 bg-white">
+    <div className="py-3 pl-56 bg-white">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="lg:text-left ml-4">
           <h2 className="text-2xl font-bold text-navy-blue tracking-wide">
@@ -34,26 +54,18 @@ const Grid = () => {
           </h2>
         </div>
 
-        <div className="mt-10">
-          <dl className="md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <Approval users={users} loading={loading} />
-              </div>
-            </div>
+        <div className="grid grid-cols-2 gap-1">
+          <div>
+            <Approval users={users} loading={loading} />
+          </div>
 
-            <div className="flex">
-              <div className="flex-shrink-0"></div>
-            </div>
+          <div>
+            <History history={history} loading={loading} />
+          </div>
 
-            <div className="flex">
-              <div className="flex-shrink-0"></div>
-            </div>
+          <div></div>
 
-            <div className="flex">
-              <div className="flex-shrink-0"></div>
-            </div>
-          </dl>
+          <div></div>
         </div>
       </div>
     </div>

@@ -1,19 +1,21 @@
 import React from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./assets/output.css";
 import "./assets/gradient.css";
 
-import Navbar from "./components/Navbar";
+import Homepage from "./components/Homepage";
 import Grid from "./components/Grid";
+import Modal from "./components/Modal";
 
 const App = () => {
-  const navHeader = { company: "Empresa A - Sala 210", user: "João Alves" };
-  const navItems = ["Home", "Agendamentos", "Cadastros", "Report", "Sair"];
-
   return (
-    <div className="flex h-screen w-screen">
-      <Navbar navHeader={navHeader} navItems={navItems} />
-      <Grid />
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={Homepage} />
+        <Route exact path="/dashboard" component={Grid} />
+        <Route exact path="/dashboard/:id" component={Modal} />
+      </Switch>
+    </BrowserRouter>
   );
 };
 

@@ -10,7 +10,7 @@ const Navbar = ({ navHeader, navItems }) => {
   });
 
   return (
-    <aside className="gradient w-72 h-full fixed">
+    <aside className="gradient w-64 h-full fixed">
       <nav>
         <div className="p-6">
           <img
