@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 import Approval from "./Approval";
 import Scheduled from "./Scheduled";
@@ -10,6 +9,7 @@ import Graph from "./Graph";
 const Grid = () => {
   const [users, setUsers] = useState([]);
   const [history, setHistory] = useState([]);
+  const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState({
     UserLoading: true,
     HistoryLoading: true,
@@ -30,6 +30,7 @@ const Grid = () => {
       }
     }
     getUsers();
+
     async function getHistory() {
       try {
         const response = await axios.get(
@@ -37,12 +38,23 @@ const Grid = () => {
         );
         setHistory([...response.data.data.last_access]);
         setLoading(!loading.HistoryLoading);
-        console.log(history);
       } catch (error) {
         console.error(error);
       }
     }
     getHistory();
+
+    async function getSchedule() {
+      try {
+        const response = await axios.get(
+          "https://sagris.com.br/teste-front/api/scheduled"
+        );
+        setSchedule([...response.data.data.scheduled]);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getSchedule();
   }, []);
 
   return (
@@ -63,7 +75,13 @@ const Grid = () => {
             <History history={history} loading={loading} />
           </div>
 
-          <div></div>
+          <div>
+            <Scheduled
+              schedule={schedule}
+              loading={loading}
+              setLoading={setLoading}
+            />
+          </div>
 
           <div></div>
         </div>

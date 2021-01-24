@@ -93,7 +93,7 @@ const Modal = (props) => {
                       <img
                         className="h-20 w-20 rounded-full"
                         src={userDetail.avatar}
-                        alt="a photo uploaded from the user"
+                        alt="uploaded from the user"
                       />
                     </div>
                     <div className="ml-4">

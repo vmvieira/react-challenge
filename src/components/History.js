@@ -33,7 +33,7 @@ const History = ({ history, loading }) => {
                       <img
                         className="h-10 w-10 rounded-full"
                         src={user.avatar}
-                        alt="a photo uploaded from the user"
+                        alt="uploaded from the user"
                       />
                     </div>
                     <div className="ml-4">

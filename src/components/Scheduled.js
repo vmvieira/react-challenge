@@ -1,92 +1,132 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const Scheduled = () => {
-  return (
-    <div className="flex flex-col">
-      <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Title
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Status
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Role
-                  </th>
-                  <th scope="col" className="relative px-6 py-3">
-                    <span className="sr-only">Edit</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60"
-                          alt=""
-                        />
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">
-                          Jane Cooper
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          jane.cooper@example.com
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      Regional Paradigm Technician
-                    </div>
-                    <div className="text-sm text-gray-500">Optimization</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                      Active
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    Admin
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      href="#"
-                      className="text-indigo-600 hover:text-indigo-900"
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+const Scheduled = ({ schedule, loading, setLoading }) => {
+  const [split, setSplit] = useState([]);
+
+  useEffect(() => {
+    const newArr = schedule.slice(0, 5).map((each) => ({
+      ...each,
+      name2: "",
+      avatar2: "",
+      type_user2: "",
+      dh_access2: "",
+    }));
+    const splitArr = schedule
+      .slice(5)
+      .map(
+        (el, idx) => (
+          (newArr[idx].name2 = el.name),
+          (newArr[idx].avatar2 = el.avatar),
+          (newArr[idx].type_user2 = el.type_user),
+          (newArr[idx].dh_access2 = el.dh_access)
+        )
+      );
+
+    setSplit(newArr);
+    setLoading(!loading.ScheduleLoading);
+  }, [schedule]);
+
+  if (loading.ScheduleLoading) {
+    return (
+      <div className="lds-ripple">
+        <div></div>
+        <div></div>
       </div>
+    );
+  }
+  return (
+    <div className="p-4">
+      <table className="text-left w-full ">
+        <thead className="bg-navy-blue flex text-white w-full rounded-t-lg h-12">
+          <tr className="flex w-full mb-4">
+            <th className="p-4 w-1/4 whitespace-nowrap">Programados</th>
+            <th className="p-4 w-1/4"></th>
+            <th className="p-4 w-1/4"></th>
+            <th className="p-4 w-1/4 text-right"></th>
+          </tr>
+        </thead>
+
+        <tbody className="bg-gray-100 flex flex-col items-center justify-between overflow-y-scroll w-full divide-y-2 max-h-96 rounded-b-lg">
+          {split.map((user) => {
+            return (
+              <tr key={user.id} className="flex w-full">
+                <td className="p-4 w-full whitespace-nowrap">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0 h-10 w-10">
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src={user.avatar}
+                        alt="uploaded from the user"
+                      />
+                    </div>
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-gray-900">
+                        {user.name}
+                      </div>
+                      <div className="text-sm text-gray-600 normal-case">
+                        {user.type_user.charAt(0) +
+                          user.type_user.substring(1).toLowerCase()}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td className="p-4 w-1/4 whitespace-nowrap">
+                  <div className="text-sm text-gray-600 h-10 text-center align-middle content-center items-center m-auto">
+                    Data e hora:
+                    <div className="text-center align-middle content-center items-center m-auto">
+                      {`${user.dh_access.slice(
+                        11,
+                        16
+                      )} - ${user.dh_access
+                        .slice(0, 10)
+                        .split("-")
+                        .reverse()
+                        .join("/")}`}
+                    </div>
+                  </div>
+                </td>
+
+                <td className="p-4 w-full whitespace-nowrap">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0 h-10 w-10">
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src={user.avatar2}
+                        alt="uploaded from the user"
+                      />
+                    </div>
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-gray-900">
+                        {user.name2}
+                      </div>
+                      <div className="text-sm text-gray-600 normal-case">
+                        {user.type_user2.charAt(0) +
+                          user.type_user2.substring(1).toLowerCase()}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+
+                <td className="p-4 w-1/4 whitespace-nowrap">
+                  <div className="text-sm text-gray-600 h-10 text-center align-middle content-center items-center m-auto">
+                    Data e hora:
+                    <div className="text-center align-middle content-center items-center m-auto">
+                      {`${user.dh_access2.slice(
+                        11,
+                        16
+                      )} - ${user.dh_access2
+                        .slice(0, 10)
+                        .split("-")
+                        .reverse()
+                        .join("/")}`}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };
